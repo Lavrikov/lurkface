@@ -1,0 +1,5 @@
+In fact, more fast and thin networks tend to loose faces frecuently than original. Combination SSD with SORT
+handle this problem with low price.  
+
+//SORT Source  https://github.com/mcximing/sort-cpp
+//SSD Source
