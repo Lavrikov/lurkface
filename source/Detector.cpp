@@ -2,7 +2,7 @@
 
 
 
-// Computes IOU between two bounding boxes ( алгоритм трекинга SORT)
+// Computes IOU between two bounding boxes ( SORT)
 double DetectorSSD::GetIOU(const Rect_<float>& bb_test,const Rect_<float>& bb_gt)
 {
     const float in = (bb_test & bb_gt).area();
@@ -259,11 +259,9 @@ void DetectorSSD::Detect(const char* uuid, const int* widths, const int* heights
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/* Wrap the input layer of the network in separate cv::Mat objects
-* (one per channel). This way we save one memcpy operation and we
-* don't need to rely on cudaMemcpy2D. The cv::split in dataToBlob
-* operation will write the separate channels directly to the input
-* layer. */
+/*This is custom approach to put data into the inpot blob of caffe
+  The cv::split in DetectorSSD::dataToBlob operation will write the separate
+  channels directly to the input layer. */
 void DetectorSSD::setPipeline(std::vector<cv::Mat>* input_channels)
 {
     Blob<float>* input_layer = net_->input_blobs()[0];
