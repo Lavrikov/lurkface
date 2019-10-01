@@ -38,7 +38,7 @@ public:
 		m_trekTrsh(trek_trsh) //initial values for const parameters
 	{
 		// Set calculating device GPU-CPU
-		Caffe::set_mode(Caffe::CPU);
+		Caffe::set_mode(Caffe::GPU);
 
 		/* Load the network. */
 		try

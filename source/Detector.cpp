@@ -375,14 +375,11 @@ int main(int argc, char** argv)
             if (results[jj][0] != -1)
             {
                 cv::Point pt1, pt2;
-                pt1.x = (frame.cols*results[jj][3]) - 8;
-                pt1.y = (frame.rows*results[jj][4]) - 8;
-
-                if (pt1.x < 0){ pt1.x = 0; }
-                if (pt1.y < 0){ pt1.y = 0; }
-                pt2.x = (frame.cols*results[jj][5]);
-                pt2.y = (frame.rows*results[jj][6]);
-                if ((pt2.x - pt1.x)>0 && (pt2.y - pt1.y)>0){
+                pt1.x = std::max(0.0f,frame.cols*results[jj][3]);
+                pt1.y = std::max(0.0f,frame.rows*results[jj][4]);
+                pt2.x = std::min(float(frame.cols),frame.cols*results[jj][5]);
+                pt2.y = std::min(float(frame.rows),frame.rows*results[jj][6]);
+                if ((pt2.x - pt1.x)>5 && (pt2.y - pt1.y)>5){
                     Mat l_frame(frame, Rect(pt1.x, pt1.y, pt2.x - pt1.x, pt2.y - pt1.y));
                     cv::resize(l_frame, l_frame, Size(), 0.2, 0.2);
                     cv::resize(l_frame, l_frame, Size(pt2.x - pt1.x, pt2.y - pt1.y));
