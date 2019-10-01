@@ -71,9 +71,9 @@ private:
 
     void dataToBlob(const cv::Mat& img, std::vector<cv::Mat>* input_channels, double normalize_value);
 
-    double GetIOU(const Rect_<float>& bb_test, const Rect_<float>& bb_gt);// Computes IOU between two bounding boxes- метод используемый в алгоритме SORT
+    double GetIOU(const Rect_<float>& bb_test, const Rect_<float>& bb_gt);// Computes IOU between two bounding boxes
 
-    void Sort(const vector<TrackingBox>& detData, Prediction& outputs);//Postprocessing of SSD output bboxes to avoid missing faces between video frames
+    void Sort(const vector<TrackingBox>& detData, Prediction& outputs);//Post-processing of SSD output bboxes to avoid missing faces between video frames
 
 
 private:
@@ -84,14 +84,14 @@ private:
     std::shared_ptr<Net<float> > net_;//deploy network
     float m_nor_val = 1.0;
     bool m_useMeanFile;
-	//The confidence treshold for creating new trackers. Existing trackers living until they confirmed with suitable detections.
-    //regular values 0.1-0.3. particular treshold is selecting with video.
-	//The treshold sould be lower than maximal observing face confidence and higher than normal background confidence
+	//The confidence threshold for creating new trackers. Existing trackers living until they confirmed with suitable detections.
+    //regular values 0.1-0.3. particular threshold is selecting with video.
+	//The threshold should be lower than maximal observing face confidence and higher than normal background confidence
 	const float m_trekTrsh;
 
     //////////////////////////////////tracking 
-    vector<KalmanTracker> m_trackers;// Trackers for the every object recognized as face with high confidence at least once (большим чем в среднем для ложноположительных обьектов)
-    float m_sort_Scale = 100; //the scale factor is using for converting relative coordinates (SSD makes predictions 0..1, Tracker requiers 0..some value, pixels, it can be any value because we recalculate relative coordinates for Tracker output 0..1)
+    vector<KalmanTracker> m_trackers;// Trackers for the every object recognized as face with high confidence at least once
+    float m_sort_Scale = 100; //the scale factor is using for converting relative coordinates (SSD makes predictions 0..1, Tracker requires 0..some value, pixels, it can be any value because we recalculate relative coordinates for Tracker output 0..1)
     const float shift_left = 0.15;//bbox scale (An experimental value, a low value tends to some faces missing by tracker,a high value leads to cover to much area around a face)
     const float shift_right = 0.25;//bbox scale ----
 };

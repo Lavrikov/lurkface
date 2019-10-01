@@ -17,8 +17,8 @@ double DetectorSSD::GetIOU(const Rect_<float>& bb_test,const Rect_<float>& bb_gt
 void DetectorSSD::Sort(const vector<TrackingBox>& detData, Prediction& outputs)
 {
     //Source  https://github.com/mcximing/sort-cpp
-    //This is a C++ implementation of SORT, a simple online and realtime tracking algorithm for 2D multiple object tracking in video sequences.Original Python code and publication infomation found at https ://github.com/abewley/sort , By Alex Bewley
-    //Гиперпараметры SORT
+    //This is a C++ implementation of SORT, a simple online and realtime tracking algorithm for 2D multiple object tracking in video sequences. Original Python code and publication information found at https ://github.com/abewley/sort, By Alex Bewley
+    // SORT hyper parameters
     const int max_age = 3; //lifetime of each tracker without confirming from detected bboxes. This value sets number of video frames within ones SORT draw bbox predictions with known speed and scale and without detections form SSD. 
     const int min_hits = 1; //helps count dead trackers
     const double iouThreshold = 0.3; // threshold of differences between two bboxes(from two frames) to mark them as one object.
@@ -143,9 +143,9 @@ void DetectorSSD::Sort(const vector<TrackingBox>& detData, Prediction& outputs)
             // create and initialise new m_trackers for unmatched detections
             for (auto umd : unmatchedDetections)
             {
-                //Here we add to tracker high confidence detected faces only. Further, the tracker algoritm searches the 
-				//same faces amoung detections with low confidence scores. Exprerimentally, such confidence is often  
-				//hesitating about treshhold level. Especially, for fast detection algoritms.   
+                //Here we add to tracker high confidence detected faces only. Further, the tracker algorithm searches the 
+                //same faces among detections with low confidence scores. Experimentally, such confidence is often  
+                //hesitating about threshold level. Especially, for fast detection algorithms.   
                 if (detData[umd].confidence > m_trekTrsh)
                 {
                     KalmanTracker tracker = KalmanTracker(detData[umd].box);
@@ -182,7 +182,7 @@ void DetectorSSD::Sort(const vector<TrackingBox>& detData, Prediction& outputs)
                 detection = {0, 0, tb.confidence, tb.box.x / m_sort_Scale, tb.box.y / m_sort_Scale, (tb.box.x + tb.box.width) / m_sort_Scale, (tb.box.y + tb.box.height) / m_sort_Scale};
 				outputs.push_back(detection);
             }
-        }//skip tracker proceding in case of detections lacks
+        }//skip tracker running in case of detections lack
     }//skip SORT filters in case of existing trackers lack
 }
 
@@ -217,7 +217,7 @@ void DetectorSSD::Detect(const char* uuid, const int* widths, const int* heights
         {
 
             //Here we increase bbox size to better covering faces and tracking quality
-            //and automatically cheking boundings of frame through selecting max and min
+            //and automatically checking boundings of frame through selecting max and min
 			//coordinates here is relative from 0 to 1.
             const float xmin = std::max(0.0f, result[3] - shift_left*(result[5] - result[3]));
             const float ymin = std::max(0.0f, result[4] - shift_left*(result[6] - result[4]));
@@ -232,8 +232,8 @@ void DetectorSSD::Detect(const char* uuid, const int* widths, const int* heights
             }
 
             //convert bbox to the tracker format
-			if (xmin>0 && ymin>0 && xmax > 0 && ymax > 0) //trecking algoritm can handle positive coordinates of bboxes only
-				//coordinates values must be in pixels firmat, that is why we multiply them with m_sort_Scale 
+			if (xmin>0 && ymin>0 && xmax > 0 && ymax > 0) //trecking algorithm can handle positive coordinates of bboxes only
+				//coordinates values must be in pixels format, that is why we multiply them with m_sort_Scale 
 				// 0 - i dont know why?
 				//also we send confidence to tracikg algoritm (result[2])
                 detData.push_back(TrackingBox(Rect_<float>(Point_<float>(xmin, ymin) * m_sort_Scale, Point_<float>(xmax, ymax) * m_sort_Scale), 0, result[2]));
@@ -243,8 +243,8 @@ void DetectorSSD::Detect(const char* uuid, const int* widths, const int* heights
 
     }
 	Prediction output;
-    //Here we select appopriate bboxes with SORT
-	//The SORT method filling output with right bboxes.
+    //Here we select appropriate bboxes with SORT
+	//The SORT method filling output with correct bboxes.
     DetectorSSD::Sort(detData, output);
 	//Here we send number of detected bboxes 
 	nResults[0] = output.size();
@@ -259,7 +259,7 @@ void DetectorSSD::Detect(const char* uuid, const int* widths, const int* heights
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*This is custom approach to put data into the inpot blob of caffe
+/*This is custom approach to put data into the input blob of caffe.
   The cv::split in DetectorSSD::dataToBlob operation will write the separate
   channels directly to the input layer. */
 void DetectorSSD::setPipeline(std::vector<cv::Mat>* input_channels)
@@ -273,8 +273,8 @@ void DetectorSSD::setPipeline(std::vector<cv::Mat>* input_channels)
     for (int i = 0; i < channels; ++i)
     {
         cv::Mat channel(height, width, CV_32FC1, input_data);
-		//Now, a cv::Mat channel is refering at the same memory as a caffe::input_blob.
-		//So, writing any data to channel sends sach data automatically to caffe:: blob
+		//Now, a cv::Mat channel is referring at the same memory as a caffe::input_blob.
+		//So, writing any data to channel sends such data automatically to caffe:: blob
         input_channels->push_back(channel);
         input_data += width * height;
     }

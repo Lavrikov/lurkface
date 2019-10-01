@@ -28,7 +28,7 @@
 // images should be color RGB=16(8UC3)
 // pathToDeployFile - path to caffe deploy file with the model layers definition
 // pathToCaffeModelFile - path to caffemodel file with weights of model
-// trsh_sort - confidence level to approve bbox as face for the tracker, you should adjust this parameter, to find ballance between missing faces and false detections on your video
+// trsh_sort - confidence level to approve bbox as face for the tracker, you should adjust this parameter, to find balance between missing faces and false detections at your video
 LURK_API void* lurkCreateDetector(const wchar_t * pathToDeployFile = L"lost_deploy.prototxt", const wchar_t * pathToCaffeModelFile = L"lost.caffemodel",
 	const float trsh_sort = 0.2);
 
